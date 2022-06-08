@@ -39,5 +39,17 @@ namespace CoolParking.BL.Tests
             Assert.Single(_parkingService.GetVehicles());
             Assert.Same(_parkingService.GetVehicles()[0], newParkingService.GetVehicles()[0]);
         }
+
+        [Fact]
+        public void GetCapacity_WhenEmpty_Then10()
+        {
+            Assert.Equal(10, _parkingService.GetCapacity());
+        }
+
+        [Fact]
+        public void GetFreePlaces_WhenEmpty_Then10()
+        {
+            Assert.Equal(10, _parkingService.GetFreePlaces());
+        }
     }
 }
