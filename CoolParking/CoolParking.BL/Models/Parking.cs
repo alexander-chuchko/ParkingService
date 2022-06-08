@@ -12,7 +12,7 @@ namespace CoolParking.BL
     public class Parking
     {
         private static Parking instance;
-        public List<Vehicle> Vehicles { get; set; } = new List<Vehicle>(Settings.parkingCapacity); 
+        public List<Vehicle> Vehicles { get; set; } 
         public decimal Balance { get; set; }
         private Parking()
         {

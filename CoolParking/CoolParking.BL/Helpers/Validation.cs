@@ -23,24 +23,34 @@ namespace CoolParking.BL.Helpers
             return validationResult;
         }
 
-        public static bool CompareStrings(string password, string confirmPassword)
+        public static bool CompareStrings(string password, IEnumerable<Vehicle> vehicles) //типизированым сделать, написать с помощью LINQ
         {
             var comparisonResult = false;
 
-            var returnedResult = string.Compare(password, confirmPassword, false);
-
-            if (returnedResult == 0)
+            foreach (var vehicle in vehicles)
             {
-                comparisonResult = true;
+                var returnedResult = string.Compare(password, vehicle.Id, false);
+                
+                if (returnedResult == 0)
+                {
+                    comparisonResult = true;
+                    break;
+                }
             }
+
             return comparisonResult;
         }
 
-        public static bool IsUnique(string id)
+        public static bool IsUnique(string id, IEnumerable<Vehicle> vehicles)
         {
             var validationResult = false;
+            MatchCollection myMatches;
+            foreach (var vehicle in vehicles)
+            {
 
-            MatchCollection myMatches = Regex.Matches(id, "asdasdasdasdasd", RegexOptions.IgnoreCase | RegexOptions.ExplicitCapture);
+            }
+
+            myMatches = Regex.Matches(id, "asdasdasdasdasd", RegexOptions.IgnoreCase | RegexOptions.ExplicitCapture);
 
             if (myMatches.Count == 0)
             {

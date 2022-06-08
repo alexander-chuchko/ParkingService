@@ -28,21 +28,31 @@ namespace CoolParking.BL
 
         public Vehicle(string id, VehicleType vehicleType, decimal balance)
         {
-            if (!IsValidId(id))
-            {
-                this.Id = GenerateRandomRegistrationPlateNumber();
-            }
+            //if (!IsValidId(id))
+            //{
+            //    this.Id = GenerateRandomRegistrationPlateNumber();
+            //}
 
-            this.Id = id;
-            this.VehicleType = vehicleType;
+            //this.Id = id;
+            //this.VehicleType = vehicleType;
+
+            //int key = (int)vehicleType;
+            //this.Balance = balance < Settings.tariffs[key]
+            //? Settings.tariffs[key] :
+            //balance;
 
             int key = (int)vehicleType;
-            this.Balance = balance < Settings.tariffs[key]
-            ? Settings.tariffs[key] :
-            balance;
 
-            if (balance >= Settings.tariffs[key]){}
-            else{}
+            if (IsValidId(id) && balance >= Settings.tariffs[key])
+            {
+                this.Id = id;
+                this.VehicleType = vehicleType;
+                this.Balance = balance;
+            }
+            else
+            {
+                throw new ArgumentException();
+            }
         }
 
         #region ---helpers---
@@ -55,7 +65,7 @@ namespace CoolParking.BL
 
         private static string GenerateRandomRegistrationPlateNumber()
         {
-            const string Array_Letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            const string Array_Letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"; //move to class Settings
 
             //var res = DateTime.Now.ToString("ddmmyyhhmmss");
             Random _random = new Random();

@@ -28,6 +28,7 @@ namespace CoolParking.BL.Tests
             _parkingService.Dispose();
         }
 
+       
         [Fact]
         public void Parking_IsSingelton()
         {
@@ -51,5 +52,35 @@ namespace CoolParking.BL.Tests
         {
             Assert.Equal(10, _parkingService.GetFreePlaces());
         }
+
+        [Fact]
+        public void AddVehicle_WhenNewVehicle_ThenVehiclesPlusOne()
+        {
+
+            var vehicle = new Vehicle("AA-0001-JA", VehicleType.Bus, 120);
+
+            _parkingService.AddVehicle(vehicle);
+            Assert.Single(_parkingService.GetVehicles());
+        }
+
+        [Fact]
+        public void AddVehicle_WhenExistingVehicleId_ThenThrowArgumentException()
+        {
+            var vehicle1 = new Vehicle("AA-0001-AA", VehicleType.Bus, 100);
+            var vehicle2 = new Vehicle(vehicle1.Id, VehicleType.Motorcycle, 200);
+            _parkingService.AddVehicle(vehicle1);
+
+            Assert.Throws<ArgumentException>(() => _parkingService.AddVehicle(vehicle2));
+        }
+
+        [Theory]
+        [InlineData("AA 0001", VehicleType.Bus, 100)]
+        [InlineData("AA-0001-AA", VehicleType.Bus, -100)]
+        public void NewVehicle_WhenWrongArguments_ThenThrowArgumentException(string id, VehicleType vehicleType, decimal balance)
+        {
+            Assert.Throws<ArgumentException>(() => new Vehicle(id, vehicleType, balance));
+        }
+
+
     }
 }

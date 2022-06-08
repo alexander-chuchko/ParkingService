@@ -12,6 +12,7 @@
 // Другие детали реализации на ваше усмотрение, они просто должны соответствовать требованиям интерфейса
 // и тесты, например, в ParkingServiceTests можно найти нужный формат конструктора и правила проверки.
 
+using CoolParking.BL.Helpers;
 using CoolParking.BL.Interfaces;
 using System;
 using System.Collections.ObjectModel;
@@ -23,29 +24,34 @@ namespace CoolParking.BL
         private readonly ITimerService _withdrawTimer;
         private readonly ITimerService _logTimer;
         private readonly ILogService _logService;
-        private Parking Parking { get; set; }
+        private Parking _Parking { get; set; }
         private TransactionInfo[] TransactionInfos { get; set; }
         public ParkingService(ITimerService withdrawTimer, ITimerService logTimer, ILogService logService)
         {
-            Parking = Parking.GetInstance();
+            _Parking = Parking.GetInstance();
+            _Parking.Vehicles = new List<Vehicle>(Settings.parkingCapacity);
             this._withdrawTimer = withdrawTimer;
             this._logTimer = logTimer;
             this._logService = logService;
         }
         public void AddVehicle(Vehicle vehicle)
         {
-            try
-            {
-                if (Parking.Vehicles.Count == Settings.parkingCapacity)
+
+                if (_Parking.Vehicles.Count == Settings.parkingCapacity)
                 {
                     throw new InvalidOperationException();
+                }
+
+                if (_Parking.Vehicles.Count!=0 && Validation.CompareStrings(vehicle.Id, _Parking.Vehicles))
+                {
+                     throw new ArgumentException();
                 }
 
                 int key = (int)vehicle.VehicleType;
 
                 if (vehicle.Balance >= Settings.tariffs[key])
                 {
-                    Parking.Vehicles.Add(vehicle);
+                    _Parking.Vehicles.Add(vehicle);
                 }
                 else
                 {
@@ -53,33 +59,32 @@ namespace CoolParking.BL
                     Console.WriteLine($"Not enough funds in the account"); //
                     Console.ForegroundColor = ConsoleColor.White;
                 }
-            }
-            catch(InvalidOperationException)
-            {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine($"There are no empty spaces in the parking lot"); //
-                Console.ForegroundColor = ConsoleColor.White;
-            }
+            
+
+                //Console.ForegroundColor = ConsoleColor.Red;
+                //Console.WriteLine($"There are no empty spaces in the parking lot"); //
+                //Console.ForegroundColor = ConsoleColor.White;
+
         }
 
         public void Dispose()
         {
-            Console.WriteLine($"{Parking} has been deleted");
+
         }
 
         public decimal GetBalance()
         {
-            return Parking.Balance;
+            return _Parking.Balance;
         }
 
         public int GetCapacity()
         {
-            return Parking.Vehicles.Capacity;
+            return _Parking.Vehicles.Capacity;
         }
 
         public int GetFreePlaces()
         {
-            return Parking.Vehicles.Capacity - Parking.Vehicles.Count;
+            return _Parking.Vehicles.Capacity - _Parking.Vehicles.Count;
         }
 
         public TransactionInfo[] GetLastParkingTransactions()
@@ -89,7 +94,8 @@ namespace CoolParking.BL
 
         public ReadOnlyCollection<Vehicle> GetVehicles()
         {
-            return new ReadOnlyCollection<Vehicle>(Parking.Vehicles);
+            var collection = _Parking.Vehicles.AsReadOnly();
+            return collection;
         }
 
         public string ReadFromLog()
@@ -100,7 +106,7 @@ namespace CoolParking.BL
         public void RemoveVehicle(string vehicleId)
         {
             //Проверить id на корректность
-            var vehicle = Parking.Vehicles.Find(tr => tr.Id == vehicleId);
+            var vehicle = _Parking.Vehicles.Find(tr => tr.Id == vehicleId);
 
             if (vehicle != null)
             {
@@ -110,7 +116,7 @@ namespace CoolParking.BL
                 }
                 else
                 {
-                    Parking.Vehicles.Remove(vehicle);
+                    _Parking.Vehicles.Remove(vehicle);
                 }
             } 
         }
@@ -119,7 +125,7 @@ namespace CoolParking.BL
         {
             if(sum > Settings.initialBalanceParking)
             {
-                var vehicle = Parking.Vehicles.Find(tr => tr.Id == vehicleId);
+                var vehicle = _Parking.Vehicles.Find(tr => tr.Id == vehicleId);
 
                 if (vehicle != null)
                 {
