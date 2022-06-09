@@ -14,7 +14,6 @@
 
 using CoolParking.BL.Helpers;
 using CoolParking.BL.Interfaces;
-using System;
 using System.Collections.ObjectModel;
 using System.Timers;
 
@@ -26,7 +25,9 @@ namespace CoolParking.BL
         private readonly ITimerService _logTimer;
         private readonly ILogService _logService;
         private Parking _Parking { get; set; }
-        private TransactionInfo[] TransactionInfos { get; set; }
+        private TransactionInfo[]? TransactionInfos { get; set; }
+
+
         public ParkingService(ITimerService withdrawTimer, ITimerService logTimer, ILogService logService)
         {
             _Parking = Parking.GetInstance();
@@ -36,6 +37,7 @@ namespace CoolParking.BL
             this._logService = logService;
             this._withdrawTimer.Elapsed += OnTransactionsCompleted;
             this._logTimer.Elapsed += OnLogPaymentRecorded;
+            //this._logTimer.Interval = Settings.paymentWriteOffPeriod;
         }
         public void AddVehicle(Vehicle vehicle)
         {
@@ -55,19 +57,15 @@ namespace CoolParking.BL
             if (vehicle.Balance >= Settings.tariffs[key])
             {
                 _Parking.Vehicles.Add(vehicle);
+
+                StartOrStopTimer(_Parking.Vehicles); 
             }
             else
             {
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine($"Not enough funds in the account"); //
+                Console.WriteLine($"Not enough funds in the account"); 
                 Console.ForegroundColor = ConsoleColor.White;
             }
-
-
-            //Console.ForegroundColor = ConsoleColor.Red;
-            //Console.WriteLine($"There are no empty spaces in the parking lot"); //
-            //Console.ForegroundColor = ConsoleColor.White;
-
         }
 
         public void Dispose()
@@ -108,7 +106,6 @@ namespace CoolParking.BL
 
         public void RemoveVehicle(string vehicleId)
         {
-            //Проверить id на корректность
             var vehicle = _Parking.Vehicles.Find(tr => tr.Id == vehicleId);
 
             if (vehicle != null)
@@ -120,6 +117,8 @@ namespace CoolParking.BL
                 else
                 {
                     _Parking.Vehicles.Remove(vehicle);
+
+                    StartOrStopTimer(_Parking.Vehicles);
                 }
             }
             else
@@ -142,7 +141,7 @@ namespace CoolParking.BL
             }
         }
 
-        public void OnTransactionsCompleted(object? sender, ElapsedEventArgs e) //Write check //Написать проверки для снятия средств в зависимости от штрафа
+        private void OnTransactionsCompleted(object? sender, ElapsedEventArgs e) 
         {
             if (_Parking.Vehicles.Count != 0)
             {
@@ -163,8 +162,26 @@ namespace CoolParking.BL
                 foreach (var vehicles in _Parking.Vehicles)
                 {
                     decimal sum = Settings.tariffs[(int)vehicles.VehicleType];
-                    vehicles.Balance -= sum;
-                    _Parking.Balance += sum;
+
+                    if(vehicles.Balance < 0)
+                    {
+                        var sumFine = sum * Settings.penaltyCoefficient;
+
+                        vehicles.Balance -= sumFine;
+                        _Parking.Balance += sumFine;
+                    }
+                    else if(vehicles.Balance < sum)
+                    {
+                        var sumFine = vehicles.Balance - (vehicles.Balance + ((sum - vehicles.Balance) * Settings.penaltyCoefficient));
+
+                        vehicles.Balance -= sumFine;
+                        _Parking.Balance += sumFine;
+                    }
+                    else if(vehicles.Balance >= sum)
+                    {
+                        vehicles.Balance -= sum;
+                        _Parking.Balance += sum;
+                    }
 
 
                     TransactionInfos[count] = new TransactionInfo
@@ -180,16 +197,50 @@ namespace CoolParking.BL
 
         }
 
-        public void OnLogPaymentRecorded(object? sender, ElapsedEventArgs e)
+        private void OnLogPaymentRecorded(object? sender, ElapsedEventArgs e)
         {
             string transactions=string.Empty;
 
-            //foreach (var transaction in TransactionInfos)
-            //{
-                //transactions += $"Id:{transaction.VehicleId} Date:{transaction.TransactionTime} Sum:{transaction.Sum}";
-            //}
-           
+            if (_Parking.StartTime!= null)
+            {
+                if (TransactionInfos != null && TransactionInfos.Length > 0)
+                {
+                    foreach (var transaction in TransactionInfos)
+                    {
+                        transactions += $"Id:{transaction.VehicleId} Date:{transaction.TransactionTime} Sum:{transaction.Sum}";
+                    }
+                }
+
+                TransactionInfos = null;
+            }
+
             _logService.Write(transactions);
         }
+
+        private void StartOrStopTimer(IEnumerable<Vehicle> vehicles)
+        {
+            if (vehicles.Count() == 1)
+            {
+                _Parking.StartTime = DateTime.Now;
+                _withdrawTimer.Interval = Settings.paymentWriteOffPeriod * Settings.coefficient;
+                _withdrawTimer.Start();
+                _logTimer.Interval = Settings.loggingPeriod * Settings.coefficient;
+                _logTimer.Start();
+            }
+            else if(vehicles.Count() == 0)
+            {
+                _Parking.StartTime = null;
+                _withdrawTimer.Stop();
+                _logTimer.Stop();
+            }
+        }
+
+        private void ReSizeArray(ref TransactionInfo[] array, int size)
+        {
+            var newArray = new TransactionInfo[size];
+            Array.Copy(array, newArray, array.Length);
+            TransactionInfos = newArray;
+        }
+
     }
 }

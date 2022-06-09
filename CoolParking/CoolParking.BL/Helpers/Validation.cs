@@ -23,7 +23,7 @@ namespace CoolParking.BL.Helpers
             return validationResult;
         }
 
-        public static bool CompareStrings(string password, IEnumerable<Vehicle> vehicles) //типизированым сделать, написать с помощью LINQ
+        public static bool CompareStrings(string password, IEnumerable<Vehicle> vehicles) 
         {
             var comparisonResult = false;
 
@@ -34,30 +34,12 @@ namespace CoolParking.BL.Helpers
                 if (returnedResult == 0)
                 {
                     comparisonResult = true;
+
                     break;
                 }
             }
 
             return comparisonResult;
-        }
-
-        public static bool IsUnique(string id, IEnumerable<Vehicle> vehicles)
-        {
-            var validationResult = false;
-            MatchCollection myMatches;
-            foreach (var vehicle in vehicles)
-            {
-
-            }
-
-            myMatches = Regex.Matches(id, "asdasdasdasdasd", RegexOptions.IgnoreCase | RegexOptions.ExplicitCapture);
-
-            if (myMatches.Count == 0)
-            {
-                validationResult = true;
-            }
-            
-            return validationResult;
         }
     }
 }

@@ -12,12 +12,11 @@ namespace CoolParking.BL
     public class TimerService : ITimerService
     {
         public event ElapsedEventHandler Elapsed;
-        private static System.Timers.Timer aTimer;
+        private System.Timers.Timer aTimer;
 
         public TimerService()
         {
             aTimer = new System.Timers.Timer();
-            //Elapsed?.Invoke(this, null);
         }
         public double Interval
         {
@@ -28,12 +27,13 @@ namespace CoolParking.BL
 
         public void Dispose()
         {
-            //Try...Catch...
-            System.Console.WriteLine($"{aTimer} has been disposed");
+
         }
 
         public void Start()
         {
+            aTimer.Elapsed += FireElapsedEvent;
+            aTimer.AutoReset = true;
             aTimer.Start();
         }
 
@@ -42,9 +42,13 @@ namespace CoolParking.BL
             aTimer.Stop();
         }
 
-        public void FireElapsedEvent()
+        public void FireElapsedEvent(object? sender, ElapsedEventArgs e)
         {
-            Elapsed?.Invoke(this, null);
+            if(Elapsed!=null)
+            {
+                Elapsed?.Invoke(this, null);
+            }
+
         }
     }
 }

@@ -14,6 +14,7 @@ namespace CoolParking.BL
         public static int parkingCapacity = 10;
         public static int paymentWriteOffPeriod = 5;
         public static int loggingPeriod = 60;
+        public static int coefficient = 1000;
 
         public static Dictionary<int, decimal> tariffs = new Dictionary<int, decimal>()
         {
@@ -22,13 +23,7 @@ namespace CoolParking.BL
             { (int)VehicleType.Bus, 3.5m },
             { (int)VehicleType.Motorcycle, 1m },
         };
-        public struct TariffsDepending
-        {
-            public const double Car = 2;
-            public const double Bus = 3.5;
-            public const double Motorcycle = 1;
-        }
 
-        public static double penaltyCoefficient = 2.5;
+        public static decimal penaltyCoefficient = 2.5m;
     }
 }

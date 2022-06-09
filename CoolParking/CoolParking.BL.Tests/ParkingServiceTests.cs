@@ -1,10 +1,5 @@
 ﻿using CoolParking.BL.Interfaces;
 using FakeItEasy;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace CoolParking.BL.Tests
@@ -156,7 +151,6 @@ namespace CoolParking.BL.Tests
 
             Assert.Equal(17m, lastParkingTransactions.Sum(tr => tr.Sum));
         }
-
 
         [Fact]
         public void WhenLogTimerIsElapsed_ThenWriteLogIsHappened()

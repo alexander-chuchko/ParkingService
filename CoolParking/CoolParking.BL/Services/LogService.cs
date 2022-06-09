@@ -42,7 +42,7 @@ namespace CoolParking.BL
 
         public void Write(string logInfo)
         {
-            if (!string.IsNullOrEmpty(_logPath))
+            if (!string.IsNullOrEmpty(_logPath) && !string.IsNullOrEmpty(logInfo))
             {  
                 string formattedString = string.Concat(logInfo, "\r\n"); 
 

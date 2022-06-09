@@ -22,7 +22,7 @@ namespace CoolParking.BL
     {
         public string Id { get; private set; }
         public VehicleType VehicleType { get; private set; }
-        public decimal Balance { get; set; }  //internal
+        public  decimal Balance { get; set; }  //internal
 
         public Vehicle(string id, VehicleType vehicleType, decimal balance)
         {
@@ -48,9 +48,9 @@ namespace CoolParking.BL
         }
 
 
-        private static string GenerateRandomRegistrationPlateNumber()// Не забыть изменить метод
+        private static string GenerateRandomRegistrationPlateNumber()
         {
-            const string Array_Letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"; //move to class Settings
+            const string Array_Letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"; 
 
             Random _random = new Random();
             string firstLetters = new string(Enumerable.Repeat(Array_Letters, 2).Select(s => s[_random.Next(s.Length)]).ToArray());
@@ -58,14 +58,6 @@ namespace CoolParking.BL
             string secondLetters = new string(Enumerable.Repeat(Array_Letters, 2).Select(s => s[_random.Next(s.Length)]).ToArray());
 
             return $"{firstLetters}-{numbers}-{secondLetters}";
-        }
-
-        //Проверка на существование такого метода
-
-        private bool IsUniqueId()
-        {
-            //TO DO
-            return default(bool);
         }
 
         #endregion

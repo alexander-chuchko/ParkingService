@@ -12,8 +12,10 @@ namespace CoolParking.BL
     public class Parking : IDisposable
     {
         private static Parking? instance;
-        public List<Vehicle> Vehicles { get; set; }
+        public List<Vehicle>? Vehicles { get; set; }
         public decimal Balance { get; set; }
+
+        public DateTime? StartTime { get; set; }  
         private Parking()
         {
         }
