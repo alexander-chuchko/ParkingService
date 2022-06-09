@@ -37,8 +37,8 @@ namespace CoolParking.BL
             this._logService = logService;
             this._withdrawTimer.Elapsed += OnTransactionsCompleted;
             this._logTimer.Elapsed += OnLogPaymentRecorded;
-            //this._logTimer.Interval = Settings.paymentWriteOffPeriod;
         }
+
         public void AddVehicle(Vehicle vehicle)
         {
 

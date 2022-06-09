@@ -48,7 +48,7 @@ namespace CoolParking.BL
         }
 
 
-        private static string GenerateRandomRegistrationPlateNumber()
+        public static string GenerateRandomRegistrationPlateNumber()
         {
             const string Array_Letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"; 
 
