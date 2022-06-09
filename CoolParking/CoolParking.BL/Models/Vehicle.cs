@@ -15,8 +15,6 @@
 // Статический метод GenerateRandomRegistrationPlateNumber должен возвращать случайно сгенерированный уникальный идентификатор.
 
 using CoolParking.BL.Helpers;
-using System;
-using System.Linq;
 
 namespace CoolParking.BL
 {
@@ -28,19 +26,6 @@ namespace CoolParking.BL
 
         public Vehicle(string id, VehicleType vehicleType, decimal balance)
         {
-            //if (!IsValidId(id))
-            //{
-            //    this.Id = GenerateRandomRegistrationPlateNumber();
-            //}
-
-            //this.Id = id;
-            //this.VehicleType = vehicleType;
-
-            //int key = (int)vehicleType;
-            //this.Balance = balance < Settings.tariffs[key]
-            //? Settings.tariffs[key] :
-            //balance;
-
             int key = (int)vehicleType;
 
             if (IsValidId(id) && balance >= Settings.tariffs[key])
@@ -63,11 +48,10 @@ namespace CoolParking.BL
         }
 
 
-        private static string GenerateRandomRegistrationPlateNumber()
+        private static string GenerateRandomRegistrationPlateNumber()// Не забыть изменить метод
         {
             const string Array_Letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"; //move to class Settings
 
-            //var res = DateTime.Now.ToString("ddmmyyhhmmss");
             Random _random = new Random();
             string firstLetters = new string(Enumerable.Repeat(Array_Letters, 2).Select(s => s[_random.Next(s.Length)]).ToArray());
             string numbers = _random.Next(0, 9999).ToString("D4");

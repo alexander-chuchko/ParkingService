@@ -34,7 +34,8 @@ namespace CoolParking.BL
             this._withdrawTimer = withdrawTimer;
             this._logTimer = logTimer;
             this._logService = logService;
-            this._withdrawTimer.Elapsed += Write_Off;
+            this._withdrawTimer.Elapsed += OnTransactionsCompleted;
+            this._logTimer.Elapsed += OnLogPaymentRecorded;
         }
         public void AddVehicle(Vehicle vehicle)
         {
@@ -141,7 +142,7 @@ namespace CoolParking.BL
             }
         }
 
-        public void Write_Off(object? sender, ElapsedEventArgs e) //Write check //Написать проверки для снятия средств в зависимости от штрафа
+        public void OnTransactionsCompleted(object? sender, ElapsedEventArgs e) //Write check //Написать проверки для снятия средств в зависимости от штрафа
         {
             if (_Parking.Vehicles.Count != 0)
             {
@@ -173,12 +174,22 @@ namespace CoolParking.BL
                         Sum = sum
                     };
 
-
                     count++;
                 }
             }
 
         }
 
+        public void OnLogPaymentRecorded(object? sender, ElapsedEventArgs e)
+        {
+            string transactions=string.Empty;
+
+            //foreach (var transaction in TransactionInfos)
+            //{
+                //transactions += $"Id:{transaction.VehicleId} Date:{transaction.TransactionTime} Sum:{transaction.Sum}";
+            //}
+           
+            _logService.Write(transactions);
+        }
     }
 }

@@ -37,21 +37,22 @@ namespace CoolParking.BL
             }
             string readTransactions = File.ReadAllText(_logPath, Encoding.Default);
 
-            return readTransactions.Length > 0 ? readTransactions : "File is empty";
+            return readTransactions;
         }
 
         public void Write(string logInfo)
         {
             if (!string.IsNullOrEmpty(_logPath))
             {  
-                var res = string.Concat(logInfo, "\r\n"); 
+                string formattedString = string.Concat(logInfo, "\r\n"); 
+
                 if(File.Exists(_logPath))
                 {
-                    File.AppendAllText(_logPath, res);    
+                    File.AppendAllText(_logPath, formattedString);    
                 }
                 else
                 {
-                    File.WriteAllText(_logPath, res);
+                    File.WriteAllText(_logPath, formattedString);
                 }
             }
         }

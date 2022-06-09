@@ -157,7 +157,7 @@ namespace CoolParking.BL.Tests
             Assert.Equal(17m, lastParkingTransactions.Sum(tr => tr.Sum));
         }
 
-        /*
+
         [Fact]
         public void WhenLogTimerIsElapsed_ThenWriteLogIsHappened()
         {
@@ -165,6 +165,5 @@ namespace CoolParking.BL.Tests
 
             A.CallTo(() => _logService.Write(A<string>._)).MustHaveHappenedOnceExactly();
         }
-        */
     }
 }
