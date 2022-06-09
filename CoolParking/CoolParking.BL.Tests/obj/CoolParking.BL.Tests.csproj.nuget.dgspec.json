@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "E:\\Library\\AcademyBinary\\CloneRepo\\coolparking\\CoolParking\\CoolParking.BL.Tests\\CoolParking.BL.Tests.csproj": {}
+    "E:\\Repo\\coolparking\\CoolParking\\CoolParking.BL.Tests\\CoolParking.BL.Tests.csproj": {}
   },
   "projects": {
-    "E:\\Library\\AcademyBinary\\CloneRepo\\coolparking\\CoolParking\\CoolParking.BL.Tests\\CoolParking.BL.Tests.csproj": {
+    "E:\\Repo\\coolparking\\CoolParking\\CoolParking.BL.Tests\\CoolParking.BL.Tests.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "E:\\Library\\AcademyBinary\\CloneRepo\\coolparking\\CoolParking\\CoolParking.BL.Tests\\CoolParking.BL.Tests.csproj",
+        "projectUniqueName": "E:\\Repo\\coolparking\\CoolParking\\CoolParking.BL.Tests\\CoolParking.BL.Tests.csproj",
         "projectName": "CoolParking.BL.Tests",
-        "projectPath": "E:\\Library\\AcademyBinary\\CloneRepo\\coolparking\\CoolParking\\CoolParking.BL.Tests\\CoolParking.BL.Tests.csproj",
+        "projectPath": "E:\\Repo\\coolparking\\CoolParking\\CoolParking.BL.Tests\\CoolParking.BL.Tests.csproj",
         "packagesPath": "C:\\Users\\chuch\\.nuget\\packages\\",
-        "outputPath": "E:\\Library\\AcademyBinary\\CloneRepo\\coolparking\\CoolParking\\CoolParking.BL.Tests\\obj\\",
+        "outputPath": "E:\\Repo\\coolparking\\CoolParking\\CoolParking.BL.Tests\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
@@ -34,8 +34,8 @@
           "net6.0": {
             "targetAlias": "net6.0",
             "projectReferences": {
-              "E:\\Library\\AcademyBinary\\CloneRepo\\coolparking\\CoolParking\\CoolParking.BL\\CoolParking.BL.csproj": {
-                "projectPath": "E:\\Library\\AcademyBinary\\CloneRepo\\coolparking\\CoolParking\\CoolParking.BL\\CoolParking.BL.csproj"
+              "E:\\Repo\\coolparking\\CoolParking\\CoolParking.BL\\CoolParking.BL.csproj": {
+                "projectPath": "E:\\Repo\\coolparking\\CoolParking\\CoolParking.BL\\CoolParking.BL.csproj"
               }
             }
           }
@@ -49,26 +49,6 @@
       "frameworks": {
         "net6.0": {
           "targetAlias": "net6.0",
-          "dependencies": {
-            "FakeItEasy": {
-              "target": "Package",
-              "version": "[7.3.1, )"
-            },
-            "Microsoft.NET.Test.Sdk": {
-              "target": "Package",
-              "version": "[17.2.0, )"
-            },
-            "xunit": {
-              "target": "Package",
-              "version": "[2.4.1, )"
-            },
-            "xunit.runner.visualstudio": {
-              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
-              "suppressParent": "All",
-              "target": "Package",
-              "version": "[2.4.5, )"
-            }
-          },
           "imports": [
             "net461",
             "net462",
@@ -79,23 +59,18 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
-          "frameworkReferences": {
-            "Microsoft.NETCore.App": {
-              "privateAssets": "all"
-            }
-          },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.300\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.404\\RuntimeIdentifierGraph.json"
         }
       }
     },
-    "E:\\Library\\AcademyBinary\\CloneRepo\\coolparking\\CoolParking\\CoolParking.BL\\CoolParking.BL.csproj": {
+    "E:\\Repo\\coolparking\\CoolParking\\CoolParking.BL\\CoolParking.BL.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "E:\\Library\\AcademyBinary\\CloneRepo\\coolparking\\CoolParking\\CoolParking.BL\\CoolParking.BL.csproj",
+        "projectUniqueName": "E:\\Repo\\coolparking\\CoolParking\\CoolParking.BL\\CoolParking.BL.csproj",
         "projectName": "CoolParking.BL",
-        "projectPath": "E:\\Library\\AcademyBinary\\CloneRepo\\coolparking\\CoolParking\\CoolParking.BL\\CoolParking.BL.csproj",
+        "projectPath": "E:\\Repo\\coolparking\\CoolParking\\CoolParking.BL\\CoolParking.BL.csproj",
         "packagesPath": "C:\\Users\\chuch\\.nuget\\packages\\",
-        "outputPath": "E:\\Library\\AcademyBinary\\CloneRepo\\coolparking\\CoolParking\\CoolParking.BL\\obj\\",
+        "outputPath": "E:\\Repo\\coolparking\\CoolParking\\CoolParking.BL\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
@@ -139,12 +114,7 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
-          "frameworkReferences": {
-            "Microsoft.NETCore.App": {
-              "privateAssets": "all"
-            }
-          },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.300\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.404\\RuntimeIdentifierGraph.json"
         }
       }
     }
