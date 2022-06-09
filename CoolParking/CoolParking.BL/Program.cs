@@ -4,20 +4,43 @@
 
 using CoolParking.BL;
 using System.Reflection;
+using System.Text;
 
-//string _logFilePath = $@"{Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)}\Transactions.log";
-//ParkingService _parkingService;
-//TimerService _withdrawTimer = new TimerService();
-//TimerService _logTimer = new TimerService();
-//LogService _logService = new LogService(_logFilePath);
+string? transactions = null;
+var newArray = new TransactionInfo[]
+{
+                new TransactionInfo {VehicleId="AA-2554-HG", TransactionTime="09:02:55", Sum=5 },
+                new TransactionInfo {VehicleId="AD-2024-HG", TransactionTime="10:02:55", Sum=3 },
+                new TransactionInfo {VehicleId="AV-2984-HG", TransactionTime="11:15:55", Sum=4 },
+                new TransactionInfo {VehicleId="AW-2784-HG", TransactionTime="12:26:55", Sum=4 },
+                new TransactionInfo {VehicleId="AK-2444-HG", TransactionTime="01:02:55", Sum=5 },
+};
 
-//var vehicle = new Vehicle("AA-0001-AA", VehicleType.Truck, 100);
-//var vehicle1 = new Vehicle("AA-0001-AA", VehicleType.Truck, -20);
+foreach (var transaction in newArray)
+{
+    transactions += $"Id:{transaction.VehicleId}\nDate:{transaction.TransactionTime}\nSum:{transaction.Sum}\n\n";
+}
+string _logFilePath = $@"{Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)}\Transactions.log";
 
-//_parkingService = new ParkingService(_withdrawTimer, _logTimer, _logService);
+File.WriteAllText(_logFilePath, transactions);
 
-//_parkingService.AddVehicle(vehicle);
+File.AppendAllText(_logFilePath, transactions);
 
-//var res= _parkingService.GetVehicles();
+var res1 = File.ReadAllText(_logFilePath, Encoding.Default);
+string[] allTransactions = res1.Split(new string[] { "\n" }, 3, StringSplitOptions.RemoveEmptyEntries);
+
+var res = File.ReadLines(_logFilePath);
+
+foreach (var item in allTransactions)
+{
+    Console.WriteLine(item);
+}
 
 Console.WriteLine("Hello, World!");
+
+
+class MyClass
+{
+    public int MyProperty { get; set; }
+    public int MyProperty1 { get; set; }
+}

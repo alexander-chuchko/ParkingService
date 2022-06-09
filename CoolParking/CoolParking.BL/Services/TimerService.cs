@@ -41,5 +41,10 @@ namespace CoolParking.BL
         {
             aTimer.Stop();
         }
+
+        public void FireElapsedEvent()
+        {
+            Elapsed?.Invoke(this, null);
+        }
     }
 }

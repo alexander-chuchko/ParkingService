@@ -10,6 +10,7 @@
 
 using CoolParking.BL.Interfaces;
 using System.IO;
+using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -17,7 +18,7 @@ namespace CoolParking.BL
 {
     public class LogService : ILogService
     {
-        //private readonly string _logFilePath = $@"{Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)}\Transactions.log";
+        private readonly string _logFilePath = $@"{Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)}\Transactions.log";
         public LogService(string logFilePath)
         {
             this._logPath = logFilePath;
@@ -26,15 +27,13 @@ namespace CoolParking.BL
         private string _logPath;
         public string LogPath => _logPath;
 
-        public TransactionInfo[] TransactionInfos { get; set; }
-
         private string _readText;
-        private string _newTransaction;
 
 
         public string Read()
         {
-            FileInfo fileInf;
+            FileInfo? fileInf = null;
+
             if (!string.IsNullOrEmpty(_logPath))
             {
                 fileInf = new FileInfo(_logPath);
@@ -44,29 +43,26 @@ namespace CoolParking.BL
                     throw new System.InvalidOperationException();
                 }
             }
-            _readText = File.ReadAllText(_logPath, Encoding.Unicode);
+            _readText = File.ReadAllText(_logPath, Encoding.Default);
 
-            return _readText;
+            return _readText.Length > 0 ? _readText : "File is empty";
         }
 
         public void Write(string logInfo)
         {
-            MatchCollection myMatches = Regex.Matches(Read(), _newTransaction, RegexOptions.IgnoreCase | RegexOptions.ExplicitCapture);
-            
-            if (myMatches.Count<=0)
+            FileInfo? fileInf = null;
+
+            if (!string.IsNullOrEmpty(_logPath))
             {
-                //To do дописываем в файл с конца
-                File.WriteAllText(_logPath, _newTransaction, Encoding.Unicode);
+                fileInf=new FileInfo(_logPath);
+
+                if (fileInf.Exists)
+                {
+                    File.AppendAllText(_logPath, logInfo);    
+                }
+
+                File.WriteAllText(_logPath, logInfo);
             }
-            else
-            {
-                System.Console.WriteLine("In file is mathes");
-            }
-
-            //5 sec
-
-            //60 sec
-
         }
     }
 }

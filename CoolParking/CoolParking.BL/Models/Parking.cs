@@ -9,14 +9,13 @@ using System.Collections.Generic;
 
 namespace CoolParking.BL
 {
-    public class Parking
+    public class Parking : IDisposable
     {
-        private static Parking instance;
-        public List<Vehicle> Vehicles { get; set; } 
+        private static Parking? instance;
+        public List<Vehicle> Vehicles { get; set; }
         public decimal Balance { get; set; }
         private Parking()
         {
-            System.Console.WriteLine("Object is not");
         }
 
         public static Parking GetInstance()
@@ -27,6 +26,19 @@ namespace CoolParking.BL
             }
 
             return instance;
+        }
+
+        public void Dispose()
+        {
+        }
+
+        public void DisposeInstance()
+        {
+            if (instance != null)
+            {
+                instance.Dispose();
+                instance = null;
+            }
         }
     }
 }

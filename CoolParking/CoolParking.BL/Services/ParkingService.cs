@@ -16,6 +16,7 @@ using CoolParking.BL.Helpers;
 using CoolParking.BL.Interfaces;
 using System;
 using System.Collections.ObjectModel;
+using System.Timers;
 
 namespace CoolParking.BL
 {
@@ -33,6 +34,7 @@ namespace CoolParking.BL
             this._withdrawTimer = withdrawTimer;
             this._logTimer = logTimer;
             this._logService = logService;
+            this._withdrawTimer.Elapsed += Write_Off;
         }
         public void AddVehicle(Vehicle vehicle)
         {
@@ -69,7 +71,7 @@ namespace CoolParking.BL
 
         public void Dispose()
         {
-
+            _Parking.DisposeInstance();
         }
 
         public decimal GetBalance()
@@ -89,7 +91,7 @@ namespace CoolParking.BL
 
         public TransactionInfo[] GetLastParkingTransactions()
         {
-            throw new System.NotImplementedException();
+            return TransactionInfos;
         }
 
         public ReadOnlyCollection<Vehicle> GetVehicles()
@@ -118,24 +120,64 @@ namespace CoolParking.BL
                 {
                     _Parking.Vehicles.Remove(vehicle);
                 }
-            } 
+            }
+            else
+            {
+                throw new ArgumentException();
+            }
         }
 
         public void TopUpVehicle(string vehicleId, decimal sum)
         {
-            if(sum > Settings.initialBalanceParking)
-            {
-                var vehicle = _Parking.Vehicles.Find(tr => tr.Id == vehicleId);
+            var vehicle = _Parking.Vehicles.Find(tr => tr.Id == vehicleId);
 
-                if (vehicle != null)
-                {
-                    vehicle.Balance += sum;
-                }
+            if (vehicle!= null && sum > Settings.initialBalanceParking)
+            {
+                vehicle.Balance += sum;
             }
             else
             {
-                Console.WriteLine("sum must be > 0!!!");
+                throw new ArgumentException();
             }
+        }
+
+        public void Write_Off(object? sender, ElapsedEventArgs e) //Write check //Написать проверки для снятия средств в зависимости от штрафа
+        {
+            if(_Parking.Vehicles.Count!=0)
+            {
+                int count = 0;
+
+                if (TransactionInfos == null)
+                {
+                    TransactionInfos = new TransactionInfo[_Parking.Vehicles.Count];
+                }
+                else
+                {
+                    var newArray = new TransactionInfo[TransactionInfos.Length + _Parking.Vehicles.Count];
+                    Array.Copy(TransactionInfos, newArray, TransactionInfos.Length);
+                    TransactionInfos = newArray;
+                    count = TransactionInfos.Length - _Parking.Vehicles.Count;
+                }
+
+                foreach (var vehicles in _Parking.Vehicles)
+                {
+                    decimal sum = Settings.tariffs[(int)vehicles.VehicleType];
+                    vehicles.Balance -= sum;
+                    _Parking.Balance += sum;
+
+                    
+                    TransactionInfos[count] = new TransactionInfo
+                    {
+                        VehicleId = vehicles.Id,
+                        TransactionTime = DateTime.Now.ToString(),
+                        Sum = sum
+                    }; 
+
+
+                    count++;
+                }
+            }
+
         }
     }
 }
