@@ -20,7 +20,7 @@ namespace CoolParking.BL.Tests
             File.Delete(_logFilePath);
         }
 
-        /*
+
         [Fact]
         public void Write_WhenWriteTwice_ThenReadTwoLines()
         {
@@ -38,6 +38,8 @@ namespace CoolParking.BL.Tests
             Assert.Equal(2, Regex.Matches(actual, "\n").Count);
         }
 
+
+
         [Fact]
         public void Read_WhenExistFile_ThenReadFileContains()
         {
@@ -52,6 +54,6 @@ namespace CoolParking.BL.Tests
 
             Assert.Equal(2, Regex.Matches(actual, testStr).Count);
             Assert.Equal(2, Regex.Matches(actual, "\n").Count);
-        }*/
+        }
     }
 }

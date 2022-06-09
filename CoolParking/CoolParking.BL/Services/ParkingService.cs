@@ -39,33 +39,33 @@ namespace CoolParking.BL
         public void AddVehicle(Vehicle vehicle)
         {
 
-                if (_Parking.Vehicles.Count == Settings.parkingCapacity)
-                {
-                    throw new InvalidOperationException();
-                }
+            if (_Parking.Vehicles.Count == Settings.parkingCapacity)
+            {
+                throw new InvalidOperationException();
+            }
 
-                if (_Parking.Vehicles.Count!=0 && Validation.CompareStrings(vehicle.Id, _Parking.Vehicles))
-                {
-                     throw new ArgumentException();
-                }
+            if (_Parking.Vehicles.Count != 0 && Validation.CompareStrings(vehicle.Id, _Parking.Vehicles))
+            {
+                throw new ArgumentException();
+            }
 
-                int key = (int)vehicle.VehicleType;
+            int key = (int)vehicle.VehicleType;
 
-                if (vehicle.Balance >= Settings.tariffs[key])
-                {
-                    _Parking.Vehicles.Add(vehicle);
-                }
-                else
-                {
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine($"Not enough funds in the account"); //
-                    Console.ForegroundColor = ConsoleColor.White;
-                }
-            
+            if (vehicle.Balance >= Settings.tariffs[key])
+            {
+                _Parking.Vehicles.Add(vehicle);
+            }
+            else
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine($"Not enough funds in the account"); //
+                Console.ForegroundColor = ConsoleColor.White;
+            }
 
-                //Console.ForegroundColor = ConsoleColor.Red;
-                //Console.WriteLine($"There are no empty spaces in the parking lot"); //
-                //Console.ForegroundColor = ConsoleColor.White;
+
+            //Console.ForegroundColor = ConsoleColor.Red;
+            //Console.WriteLine($"There are no empty spaces in the parking lot"); //
+            //Console.ForegroundColor = ConsoleColor.White;
 
         }
 
@@ -131,7 +131,7 @@ namespace CoolParking.BL
         {
             var vehicle = _Parking.Vehicles.Find(tr => tr.Id == vehicleId);
 
-            if (vehicle!= null && sum > Settings.initialBalanceParking)
+            if (vehicle != null && sum > Settings.initialBalanceParking)
             {
                 vehicle.Balance += sum;
             }
@@ -143,7 +143,7 @@ namespace CoolParking.BL
 
         public void Write_Off(object? sender, ElapsedEventArgs e) //Write check //Написать проверки для снятия средств в зависимости от штрафа
         {
-            if(_Parking.Vehicles.Count!=0)
+            if (_Parking.Vehicles.Count != 0)
             {
                 int count = 0;
 
@@ -165,13 +165,13 @@ namespace CoolParking.BL
                     vehicles.Balance -= sum;
                     _Parking.Balance += sum;
 
-                    
+
                     TransactionInfos[count] = new TransactionInfo
                     {
                         VehicleId = vehicles.Id,
                         TransactionTime = DateTime.Now.ToString(),
                         Sum = sum
-                    }; 
+                    };
 
 
                     count++;
@@ -179,5 +179,6 @@ namespace CoolParking.BL
             }
 
         }
+
     }
 }

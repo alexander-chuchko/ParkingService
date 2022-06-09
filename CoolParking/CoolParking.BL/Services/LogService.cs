@@ -9,16 +9,14 @@
 // и тесты, например, в LogServiceTests можно найти нужный формат конструктора.
 
 using CoolParking.BL.Interfaces;
-using System.IO;
 using System.Reflection;
 using System.Text;
-using System.Text.RegularExpressions;
 
 namespace CoolParking.BL
 {
     public class LogService : ILogService
     {
-        private readonly string _logFilePath = $@"{Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)}\Transactions.log";
+        private readonly string _logFilePath = $@"{Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)}\transactions.log";
         public LogService(string logFilePath)
         {
             this._logPath = logFilePath;
@@ -27,41 +25,34 @@ namespace CoolParking.BL
         private string _logPath;
         public string LogPath => _logPath;
 
-        private string _readText;
-
 
         public string Read()
         {
-            FileInfo? fileInf = null;
-
             if (!string.IsNullOrEmpty(_logPath))
             {
-                fileInf = new FileInfo(_logPath);
-
-                if (!fileInf.Exists)
+                if (!File.Exists(_logPath))
                 {
                     throw new System.InvalidOperationException();
                 }
             }
-            _readText = File.ReadAllText(_logPath, Encoding.Default);
+            string readTransactions = File.ReadAllText(_logPath, Encoding.Default);
 
-            return _readText.Length > 0 ? _readText : "File is empty";
+            return readTransactions.Length > 0 ? readTransactions : "File is empty";
         }
 
         public void Write(string logInfo)
         {
-            FileInfo? fileInf = null;
-
             if (!string.IsNullOrEmpty(_logPath))
-            {
-                fileInf=new FileInfo(_logPath);
-
-                if (fileInf.Exists)
+            {  
+                var res = string.Concat(logInfo, "\r\n"); 
+                if(File.Exists(_logPath))
                 {
-                    File.AppendAllText(_logPath, logInfo);    
+                    File.AppendAllText(_logPath, res);    
                 }
-
-                File.WriteAllText(_logPath, logInfo);
+                else
+                {
+                    File.WriteAllText(_logPath, res);
+                }
             }
         }
     }
