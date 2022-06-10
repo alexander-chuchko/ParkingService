@@ -28,7 +28,7 @@ namespace CoolParking.BL.Models
             }
             else
             {
-                throw new ArgumentException();
+                throw new ArgumentException("Invalid identifier entered");
             }
         }
 
@@ -42,12 +42,12 @@ namespace CoolParking.BL.Models
 
         public static string GenerateRandomRegistrationPlateNumber()
         {
-            string plateNumber = $"{GenerateTwoNumbers(Settings.TWO_LETERS)}-{GenerateTwoNumbers(Settings.FOUR_DIGITS)}-{GenerateTwoNumbers(Settings.TWO_LETERS)}";
+            string plateNumber = $"{GenerateString(Settings.TWO_LETERS)}-{GenerateString(Settings.FOUR_DIGITS)}-{GenerateString(Settings.TWO_LETERS)}";
 
             return plateNumber;
         }
 
-        private static string GenerateTwoNumbers(string key)
+        private static string GenerateString(string key)
         {
             string result = string.Empty;
             Random _random = new Random();
