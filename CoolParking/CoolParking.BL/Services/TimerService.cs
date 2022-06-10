@@ -2,7 +2,6 @@
 //       Service have to be just wrapper on System Timers.
 
 using CoolParking.BL.Interfaces;
-using System.Threading;
 using System.Timers;
 
 namespace CoolParking.BL.Services
