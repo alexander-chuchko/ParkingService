@@ -14,6 +14,11 @@ namespace CoolParking.BL.Models
         public static int paymentWriteOffPeriod = 5;
         public static int loggingPeriod = 60;
         public static int coefficient = 1000;
+        public static decimal penaltyCoefficient = 2.5m;
+        public const string ARRAY_LETERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        public const string TWO_LETERS = "TWO_LETERS";
+        public const string FOUR_DIGITS = "FOUR_DIGITS";
+
 
         public static Dictionary<int, decimal> tariffs = new Dictionary<int, decimal>()
         {
@@ -22,7 +27,5 @@ namespace CoolParking.BL.Models
             { (int)VehicleType.Bus, 3.5m },
             { (int)VehicleType.Motorcycle, 1m },
         };
-
-        public static decimal penaltyCoefficient = 2.5m;
     }
 }

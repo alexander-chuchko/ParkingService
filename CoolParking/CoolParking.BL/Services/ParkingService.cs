@@ -6,7 +6,6 @@
 //       and tests, for example, in ParkingServiceTests you can find the necessary constructor format and validation rules.
 
 
-using CoolParking.BL.Helpers;
 using CoolParking.BL.Interfaces;
 using CoolParking.BL.Models;
 using System.Collections.ObjectModel;
@@ -42,7 +41,9 @@ namespace CoolParking.BL.Services
                 throw new InvalidOperationException("There are no spaces in the parking lot");
             }
 
-            if (_Parking.Vehicles.Count != 0 && Validation.CompareStrings(vehicle.Id, _Parking.Vehicles))
+            var hasValue = _Parking.Vehicles.Exists(v => v.Id == vehicle.Id);
+
+            if (_Parking.Vehicles.Count != 0 && hasValue)
             {
                 throw new ArgumentException("Invalid identifier entered");
             }
@@ -54,12 +55,6 @@ namespace CoolParking.BL.Services
                 _Parking.Vehicles.Add(vehicle);
 
                 StartOrStopTimer(_Parking.Vehicles); 
-            }
-            else
-            {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine($"Not enough funds in the account"); 
-                Console.ForegroundColor = ConsoleColor.White;
             }
         }
 

@@ -1,5 +1,4 @@
-﻿using CoolParking.BL.Models;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 
 namespace CoolParking.BL.Helpers
 {
@@ -22,25 +21,6 @@ namespace CoolParking.BL.Helpers
             }
 
             return validationResult;
-        }
-
-        public static bool CompareStrings(string password, IEnumerable<Vehicle> vehicles) 
-        {
-            var comparisonResult = false;
-
-            foreach (var vehicle in vehicles)
-            {
-                var returnedResult = string.Compare(password, vehicle.Id, false);
-                
-                if (returnedResult == 0)
-                {
-                    comparisonResult = true;
-
-                    break;
-                }
-            }
-
-            return comparisonResult;
         }
     }
 }

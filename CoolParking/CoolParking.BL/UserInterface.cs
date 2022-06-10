@@ -6,7 +6,7 @@ namespace CoolParking.BL
     public class UserInterface
     {
         private readonly IParkingService _parkingService;
-        private int numberMenuItems = 8;
+        private readonly int numberMenuItems = 8;
         private string? key;
 
         public UserInterface(IParkingService parkingService)
@@ -14,6 +14,7 @@ namespace CoolParking.BL
             this._parkingService = parkingService;  
         }
 
+        #region ---helpers---
         private void ShowCurrentBalance()
         {
             Console.WriteLine($"\t\tParking balance: {_parkingService.GetBalance()}");
@@ -49,7 +50,7 @@ namespace CoolParking.BL
 
                 foreach (var item in _parkingService.GetVehicles())
                 {
-                    Console.WriteLine($"\t\t{++count} - Id:{item.Id}; VehicleType:{item.VehicleType}; Balance:{item.Balance}");
+                    Console.WriteLine($"\t\t{++count} - Id:{item.Id} VehicleType:{item.VehicleType} Balance:{item.Balance}");
                 }
             }
             else
@@ -66,7 +67,7 @@ namespace CoolParking.BL
 
             foreach (var item in transactions)
             {
-                Console.WriteLine($"\t\t{item}");
+                Console.WriteLine($"{item}");
             }
         }
 
@@ -102,8 +103,9 @@ namespace CoolParking.BL
 
         private void PutTrAidForParking()
         {
-            var vehicle = new Vehicle(Vehicle.GenerateRandomRegistrationPlateNumber(), VehicleType.Truck, 23);
+            var vehicle = new Vehicle(Vehicle.GenerateRandomRegistrationPlateNumber(), VehicleType.Truck, 100);
             _parkingService.AddVehicle(vehicle);
+            Console.WriteLine($"\t\tAdded to the parking car - Id:{vehicle.Id} VehicleType:{vehicle.VehicleType} Balance:{vehicle.Balance}");
         }
 
         private void ClearConsole()
@@ -111,29 +113,41 @@ namespace CoolParking.BL
             Console.Clear();
         }
 
+        private void ChangedColor(ConsoleColor consoleColor)
+        {
+            Console.ForegroundColor=consoleColor;
+        }
+
         private void ShowInfo()
         {
             Console.Clear();
-            Console.WriteLine("\n\t\t\t\t\tCoolParking");
-            Console.WriteLine("\n\t\tTo work with text, the application provides the following methods:");
+            ChangedColor(ConsoleColor.Red);
+
+            Console.WriteLine("\n\t\t\t\t\tCOOL PARKING");
+            ChangedColor(ConsoleColor.Yellow);
+
+            Console.WriteLine("\n\t\tMENU");
+
+            Console.ForegroundColor = ConsoleColor.White;
+
             Console.WriteLine("\n\t" +
                 "1 - Display the current balance of the Parking Lot\n\t" +
-                "2 - Display the amount of money earned for the current period (before logging).\n\t" +
-                "3 - Display the number of free/occupied parking spaces on the screen.\n\t" +
-                "4 - Display the list of Tr. funds located in the Parking lot.\n\t" +
+                "2 - Display the amount of money earned for the current period (before logging)\n\t" +
+                "3 - Display the number of free/occupied parking spaces on the screen\n\t" +
+                "4 - Display the list of Tr. funds located in the Parking lot\n\t" +
                 "5 - Put Tr. aid for parking\n\t" +
-                "6 - Pick up the vehicle from the Parking lot.\n\t" +
-                "7 - Top up the balance of a specific Tr. funds.\n\t" +
-                "8 - Display transaction history (by reading data from the Transactions.log file).\n\t");
+                "6 - Pick up the vehicle from the Parking lot\n\t" +
+                "7 - Top up the balance of a specific Tr. funds\n\t" +
+                "8 - Display transaction history\n\t");
 
-            Console.WriteLine("\n\t\tTo start the application, specify the method index:");
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine("\n\t\tSelect the desired item:\n");
+            Console.ForegroundColor = ConsoleColor.White;
         }
 
         public void StartApplication()
         {
             ShowInfo();
-
-
 
             do
             {
@@ -197,13 +211,18 @@ namespace CoolParking.BL
                             break;
                     }
                 }
-                else
+                else if (key != "e")
                 {
                     Console.WriteLine("Invalid value specified!");
                 }
-                Console.WriteLine("\n\tEnter item number\n\tExit the application - 'e'\n");
+
+                ChangedColor(ConsoleColor.Red);
+                Console.WriteLine("\n\tEXIT THE APPLICATION - 'e'\n");
+                ChangedColor(ConsoleColor.White);
 
             } while (key != "e");
         }
+
+        #endregion
     }
 }

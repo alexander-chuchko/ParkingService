@@ -12,9 +12,9 @@ namespace CoolParking.BL.Models
 {
     public class Vehicle
     {
-        public string Id { get; private set; }
-        public VehicleType VehicleType { get; private set; }
-        public  decimal Balance { get; set; }  //internal
+        public string Id { get; }
+        public VehicleType VehicleType { get; }
+        public  decimal Balance { get; internal set; } 
 
         public Vehicle(string id, VehicleType vehicleType, decimal balance)
         {
@@ -42,14 +42,26 @@ namespace CoolParking.BL.Models
 
         public static string GenerateRandomRegistrationPlateNumber()
         {
-            const string Array_Letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"; 
+            string plateNumber = $"{GenerateTwoNumbers(Settings.TWO_LETERS)}-{GenerateTwoNumbers(Settings.FOUR_DIGITS)}-{GenerateTwoNumbers(Settings.TWO_LETERS)}";
 
+            return plateNumber;
+        }
+
+        private static string GenerateTwoNumbers(string key)
+        {
+            string result = string.Empty;
             Random _random = new Random();
-            string firstLetters = new string(Enumerable.Repeat(Array_Letters, 2).Select(s => s[_random.Next(s.Length)]).ToArray());
-            string numbers = _random.Next(0, 9999).ToString("D4");
-            string secondLetters = new string(Enumerable.Repeat(Array_Letters, 2).Select(s => s[_random.Next(s.Length)]).ToArray());
 
-            return $"{firstLetters}-{numbers}-{secondLetters}";
+            if (key == Settings.TWO_LETERS)
+            {
+                result = new string(Enumerable.Repeat(Settings.ARRAY_LETERS, 2).Select(s => s[_random.Next(s.Length)]).ToArray());
+            }
+            else if(key == Settings.FOUR_DIGITS)
+            {
+                result = _random.Next(0, 9999).ToString("D4");
+            }
+
+            return result;
         }
 
         #endregion
