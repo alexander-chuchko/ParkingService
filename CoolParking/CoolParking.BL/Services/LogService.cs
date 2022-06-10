@@ -3,10 +3,6 @@
 //       Other implementation details are up to you, they just have to match the interface requirements
 //       and tests, for example, in LogServiceTests you can find the necessary constructor format.
 
-// TODO: реализовать класс LogService из интерфейса ILogService.
-// Одно явное требование - для метода чтения, если файл не найден, должно быть выброшено InvalidOperationException
-// Другие детали реализации на ваше усмотрение, они просто должны соответствовать требованиям интерфейса
-// и тесты, например, в LogServiceTests можно найти нужный формат конструктора.
 
 using CoolParking.BL.Interfaces;
 using System.Reflection;

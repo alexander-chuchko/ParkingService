@@ -1,8 +1,6 @@
 ﻿// TODO: implement class Settings.
 //       Implementation details are up to you, they just have to meet the requirements of the home task.
 
-// TODO: реализовать настройки класса.
-// Детали реализации на ваше усмотрение, они просто должны соответствовать требованиям домашнего задания.
 
 using System.Collections.Generic;
 

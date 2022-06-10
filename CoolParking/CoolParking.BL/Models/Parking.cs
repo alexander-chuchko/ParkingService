@@ -1,9 +1,6 @@
 ﻿// TODO: implement class Parking.
 //       Implementation details are up to you, they just have to meet the requirements 
 //       of the home task and be consistent with other classes and tests.
-// TODO: реализовать класс Parking.
-// Детали реализации зависят от вас, они просто должны соответствовать требованиям
-// домашнего задания и согласовываться с другими занятиями и тестами.
 
 using System.Collections.Generic;
 
