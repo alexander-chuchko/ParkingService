@@ -2,10 +2,13 @@
 //       Implementation details are up to you, they just have to meet the requirements of the home task.
 
 
+using System.Reflection;
+
 namespace CoolParking.BL.Models
 {
     public static class Settings
     {
+        public static string logFilePath = $@"{Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)}\transactions.log";
         public static decimal initialBalanceParking = 0;
         public static int parkingCapacity = 10;
         public static int paymentWriteOffPeriod = 5;
