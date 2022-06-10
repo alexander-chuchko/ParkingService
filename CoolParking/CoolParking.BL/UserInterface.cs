@@ -3,12 +3,13 @@ using CoolParking.BL.Models;
 
 namespace CoolParking.BL
 {
-    public class Navigation
+    public class UserInterface
     {
         private readonly IParkingService _parkingService;
         private int numberMenuItems = 8;
         private string? key;
-        public Navigation(IParkingService parkingService)
+
+        public UserInterface(IParkingService parkingService)
         {
             this._parkingService = parkingService;  
         }
@@ -105,8 +106,14 @@ namespace CoolParking.BL
             _parkingService.AddVehicle(vehicle);
         }
 
+        private void ClearConsole()
+        {
+            Console.Clear();
+        }
+
         private void ShowInfo()
         {
+            Console.Clear();
             Console.WriteLine("\n\t\t\t\t\tCoolParking");
             Console.WriteLine("\n\t\tTo work with text, the application provides the following methods:");
             Console.WriteLine("\n\t" +
@@ -126,8 +133,11 @@ namespace CoolParking.BL
         {
             ShowInfo();
 
+
+
             do
             {
+
                 key = Console.ReadLine();
 
                 if (int.TryParse(key, out int number) && number > 0 && number <= numberMenuItems)
@@ -135,34 +145,50 @@ namespace CoolParking.BL
                     switch (number)
                     {
                         case 1:
+                            ClearConsole();
+                            ShowInfo();
                             ShowCurrentBalance();
                             break;
                         case 2:
+                            ClearConsole();
+                            ShowInfo();
                             ShowAmountMoneyEarned();
                             break;
 
                         case 3:
+                            ClearConsole();
+                            ShowInfo();
                             ShowNumberFreeAndOccupiedSpaces();
                             break;
 
                         case 4:
+                            ClearConsole();
+                            ShowInfo();
                             ShowListTrFundsLocated();
                             break;
 
                         case 5:
+                            ClearConsole();
+                            ShowInfo();
                             PutTrAidForParking();
                             break;
 
                         case 6:
+                            ClearConsole();
+                            ShowInfo();
                             PickUpVehicle();
                             break;
 
                         case 7:
+                            ClearConsole();
+                            ShowInfo();
                             PutTrAidForParking();
                             TopUpBalanceCar();
                             break;
 
                         case 8:
+                            ClearConsole();
+                            ShowInfo();
                             ShowTransactionHistory();
                             break;
 

@@ -12,7 +12,7 @@ using CoolParking.BL.Services;
 
 
 ParkingService parkingService = new ParkingService(new TimerService(), new TimerService(), new LogService(Settings.logFilePath));
-Navigation navigation = new Navigation(parkingService);
+UserInterface navigation = new UserInterface(parkingService);
 navigation.StartApplication();
 
 
