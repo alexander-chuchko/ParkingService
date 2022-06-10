@@ -8,7 +8,7 @@
 
 using CoolParking.BL.Helpers;
 
-namespace CoolParking.BL
+namespace CoolParking.BL.Models
 {
     public class Vehicle
     {

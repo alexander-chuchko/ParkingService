@@ -2,14 +2,13 @@
 //       Implementation details are up to you, they just have to meet the requirements 
 //       of the home task and be consistent with other classes and tests.
 
-using System.Collections.Generic;
 
-namespace CoolParking.BL
+namespace CoolParking.BL.Models
 {
     public class Parking : IDisposable
     {
         private static Parking? instance;
-        public List<Vehicle>? Vehicles { get; set; }
+        public List<Vehicle> Vehicles { get; set; }
         public decimal Balance { get; set; }
 
         public DateTime? StartTime { get; set; }  

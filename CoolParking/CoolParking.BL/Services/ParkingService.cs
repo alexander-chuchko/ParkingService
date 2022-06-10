@@ -5,19 +5,14 @@
 //       Other implementation details are up to you, they just have to match the interface requirements
 //       and tests, for example, in ParkingServiceTests you can find the necessary constructor format and validation rules.
 
-// TODO: реализовать класс ParkingService из интерфейса IParkingService.
-// При попытке добавить машину на полную парковку должно быть выброшено исключение InvalidOperationException.
-// При попытке удаления автомобиля с отрицательным балансом (долгом) должно быть выброшено InvalidOperationException.
-// Другие правила проверки и формат конструктора пошли из тестов.
-// Другие детали реализации на ваше усмотрение, они просто должны соответствовать требованиям интерфейса
-// и тесты, например, в ParkingServiceTests можно найти нужный формат конструктора и правила проверки.
 
 using CoolParking.BL.Helpers;
 using CoolParking.BL.Interfaces;
+using CoolParking.BL.Models;
 using System.Collections.ObjectModel;
 using System.Timers;
 
-namespace CoolParking.BL
+namespace CoolParking.BL.Services
 {
     public class ParkingService : IParkingService
     {
@@ -25,7 +20,7 @@ namespace CoolParking.BL
         private readonly ITimerService _logTimer;
         private readonly ILogService _logService;
         private Parking _Parking { get; set; }
-        private TransactionInfo[]? TransactionInfos { get; set; }
+        private TransactionInfo[] TransactionInfos { get; set; }
 
 
         public ParkingService(ITimerService withdrawTimer, ITimerService logTimer, ILogService logService)
@@ -35,8 +30,8 @@ namespace CoolParking.BL
             this._withdrawTimer = withdrawTimer;
             this._logTimer = logTimer;
             this._logService = logService;
-            this._withdrawTimer.Elapsed += OnTransactionsCompleted;
-            this._logTimer.Elapsed += OnLogPaymentRecorded;
+            this._withdrawTimer.Elapsed += OnWithdraw_Funds;
+            this._logTimer.Elapsed += OnLog_Record;
         }
 
         public void AddVehicle(Vehicle vehicle)
@@ -44,12 +39,12 @@ namespace CoolParking.BL
 
             if (_Parking.Vehicles.Count == Settings.parkingCapacity)
             {
-                throw new InvalidOperationException();
+                throw new InvalidOperationException("There are no spaces in the parking lot");
             }
 
             if (_Parking.Vehicles.Count != 0 && Validation.CompareStrings(vehicle.Id, _Parking.Vehicles))
             {
-                throw new ArgumentException();
+                throw new ArgumentException("Invalid identifier entered");
             }
 
             int key = (int)vehicle.VehicleType;
@@ -112,7 +107,7 @@ namespace CoolParking.BL
             {
                 if (vehicle.Balance < Settings.initialBalanceParking)
                 {
-                    throw new InvalidOperationException();
+                    throw new InvalidOperationException("Your balance is negative");
                 }
                 else
                 {
@@ -123,7 +118,7 @@ namespace CoolParking.BL
             }
             else
             {
-                throw new ArgumentException();
+                throw new ArgumentException("This number does not exist");
             }
         }
 
@@ -137,11 +132,11 @@ namespace CoolParking.BL
             }
             else
             {
-                throw new ArgumentException();
+                throw new ArgumentException("This number does not exist");
             }
         }
 
-        private void OnTransactionsCompleted(object? sender, ElapsedEventArgs e) 
+        private void OnWithdraw_Funds(object? sender, ElapsedEventArgs e) 
         {
             if (_Parking.Vehicles.Count != 0)
             {
@@ -153,68 +148,79 @@ namespace CoolParking.BL
                 }
                 else
                 {
-                    var newArray = new TransactionInfo[TransactionInfos.Length + _Parking.Vehicles.Count];
-                    Array.Copy(TransactionInfos, newArray, TransactionInfos.Length);
-                    TransactionInfos = newArray;
+                    Resize(TransactionInfos.Length + _Parking.Vehicles.Count);
                     count = TransactionInfos.Length - _Parking.Vehicles.Count;
                 }
 
                 foreach (var vehicles in _Parking.Vehicles)
                 {
-                    decimal sum = Settings.tariffs[(int)vehicles.VehicleType];
+                    decimal tariff = Settings.tariffs[(int)vehicles.VehicleType];
+                    decimal sumFine = 0;
 
                     if(vehicles.Balance < 0)
                     {
-                        var sumFine = sum * Settings.penaltyCoefficient;
+                        sumFine = tariff * Settings.penaltyCoefficient;
 
                         vehicles.Balance -= sumFine;
                         _Parking.Balance += sumFine;
                     }
-                    else if(vehicles.Balance < sum)
+                    else if(vehicles.Balance < tariff)
                     {
-                        var sumFine = vehicles.Balance - (vehicles.Balance + ((sum - vehicles.Balance) * Settings.penaltyCoefficient));
+                        sumFine = vehicles.Balance + ((tariff - vehicles.Balance) * Settings.penaltyCoefficient);
 
                         vehicles.Balance -= sumFine;
                         _Parking.Balance += sumFine;
                     }
-                    else if(vehicles.Balance >= sum)
+                    else if(vehicles.Balance >= tariff)
                     {
-                        vehicles.Balance -= sum;
-                        _Parking.Balance += sum;
+                        sumFine = tariff;
+                        vehicles.Balance -= sumFine;
+                        _Parking.Balance += sumFine;
                     }
 
 
                     TransactionInfos[count] = new TransactionInfo
                     {
                         VehicleId = vehicles.Id,
-                        TransactionTime = DateTime.Now.ToString(),
-                        Sum = sum
+                        TransactionTime = DateTime.Now.ToString("hh:mm:ss"),
+                        Sum = sumFine
                     };
 
                     count++;
                 }
             }
-
         }
 
-        private void OnLogPaymentRecorded(object? sender, ElapsedEventArgs e)
+        private void Resize(int size)
         {
-            string transactions=string.Empty;
+            TransactionInfo[] newArray = new TransactionInfo[size];
 
-            if (_Parking.StartTime!= null)
+            for (int i = 0; i < TransactionInfos.Length; i++)
             {
-                if (TransactionInfos != null && TransactionInfos.Length > 0)
+                newArray[i] = TransactionInfos[i];
+            }
+
+            TransactionInfos = newArray;
+        }
+
+        private void OnLog_Record(object? sender, ElapsedEventArgs e)
+        {
+            string? transactions = string.Empty;
+
+            if (TransactionInfos != null)
+            {
+                foreach (var transaction in TransactionInfos)
                 {
-                    foreach (var transaction in TransactionInfos)
+                    if(transaction != null)
                     {
-                        transactions += $"Id:{transaction.VehicleId} Date:{transaction.TransactionTime} Sum:{transaction.Sum}";
+                        transactions += $"Id:{transaction.VehicleId} Date:{transaction.TransactionTime} Sum:{transaction.Sum}\r";
                     }
                 }
-
-                TransactionInfos = null;
             }
 
             _logService.Write(transactions);
+
+            TransactionInfos = null;
         }
 
         private void StartOrStopTimer(IEnumerable<Vehicle> vehicles)
@@ -233,13 +239,6 @@ namespace CoolParking.BL
                 _withdrawTimer.Stop();
                 _logTimer.Stop();
             }
-        }
-
-        private void ReSizeArray(ref TransactionInfo[] array, int size)
-        {
-            var newArray = new TransactionInfo[size];
-            Array.Copy(array, newArray, array.Length);
-            TransactionInfos = newArray;
         }
 
     }

@@ -5,14 +5,12 @@
 
 
 using CoolParking.BL.Interfaces;
-using System.Reflection;
 using System.Text;
 
-namespace CoolParking.BL
+namespace CoolParking.BL.Services
 {
     public class LogService : ILogService
     {
-        private readonly string _logFilePath = $@"{Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)}\transactions.log";
         public LogService(string logFilePath)
         {
             this._logPath = logFilePath;
@@ -24,6 +22,8 @@ namespace CoolParking.BL
 
         public string Read()
         {
+            string? readTransactions = null;
+
             if (!string.IsNullOrEmpty(_logPath))
             {
                 if (!File.Exists(_logPath))
@@ -31,25 +31,43 @@ namespace CoolParking.BL
                     throw new System.InvalidOperationException();
                 }
             }
-            string readTransactions = File.ReadAllText(_logPath, Encoding.Default);
 
-            return readTransactions;
+            try
+            {
+                readTransactions = File.ReadAllText(_logPath, Encoding.Default);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error:{ex.Message}");
+            }
+
+            return readTransactions?.Length > default(int) ? readTransactions : "There are no recorded transactions";
         }
 
         public void Write(string logInfo)
         {
             if (!string.IsNullOrEmpty(_logPath) && !string.IsNullOrEmpty(logInfo))
+            
             {  
-                string formattedString = string.Concat(logInfo, "\r\n"); 
+                string? formattedString = string.Concat(logInfo, "\n");
 
-                if(File.Exists(_logPath))
+                try
                 {
-                    File.AppendAllText(_logPath, formattedString);    
+                    if (File.Exists(_logPath))
+                    {
+                        File.AppendAllText(_logPath, formattedString);
+                    }
+                    else
+                    {
+                        File.WriteAllText(_logPath, formattedString);
+                    }
                 }
-                else
+                catch(Exception ex)
                 {
-                    File.WriteAllText(_logPath, formattedString);
+                    Console.WriteLine($"Error:{ex.Message}");
                 }
+
+                formattedString = null;
             }
         }
     }

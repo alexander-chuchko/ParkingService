@@ -1,4 +1,5 @@
-﻿using System.Text.RegularExpressions;
+﻿using CoolParking.BL.Models;
+using System.Text.RegularExpressions;
 
 namespace CoolParking.BL.Helpers
 {

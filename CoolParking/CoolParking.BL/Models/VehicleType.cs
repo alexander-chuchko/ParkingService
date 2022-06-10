@@ -2,7 +2,7 @@
 //       Items: PassengerCar, Truck, Bus, Motorcycle.
 
 
-namespace CoolParking.BL
+namespace CoolParking.BL.Models
 {
     public enum VehicleType
     {

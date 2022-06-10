@@ -1,4 +1,6 @@
 ﻿using CoolParking.BL.Interfaces;
+using CoolParking.BL.Models;
+using CoolParking.BL.Services;
 using FakeItEasy;
 using Xunit;
 

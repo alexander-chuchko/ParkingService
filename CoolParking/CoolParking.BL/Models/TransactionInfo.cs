@@ -3,7 +3,7 @@
 //       Other implementation details are up to you, they just have to meet the requirements of the homework.
 
 
-namespace CoolParking.BL
+namespace CoolParking.BL.Models
 {
     public class TransactionInfo
     {

@@ -1,13 +1,11 @@
 ﻿// TODO: implement class TimerService from the ITimerService interface.
 //       Service have to be just wrapper on System Timers.
 
-// TODO: реализация класса TimerService из внешнего интерфейса ITimerService.
-// Служба должна быть просто оболочкой для системных таймеров.
 using CoolParking.BL.Interfaces;
 using System.Threading;
 using System.Timers;
 
-namespace CoolParking.BL
+namespace CoolParking.BL.Services
 {
     public class TimerService : ITimerService
     {
@@ -27,7 +25,6 @@ namespace CoolParking.BL
 
         public void Dispose()
         {
-
         }
 
         public void Start()
@@ -48,7 +45,6 @@ namespace CoolParking.BL
             {
                 Elapsed?.Invoke(this, null);
             }
-
         }
     }
 }

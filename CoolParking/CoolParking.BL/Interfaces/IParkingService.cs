@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CoolParking.BL.Models;
+using System;
 using System.Collections.ObjectModel;
 
 
