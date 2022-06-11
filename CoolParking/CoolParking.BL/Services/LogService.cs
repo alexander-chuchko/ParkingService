@@ -24,50 +24,32 @@ namespace CoolParking.BL.Services
         {
             string? readTransactions = null;
 
-            if (!string.IsNullOrEmpty(_logPath))
+            if (!File.Exists(_logPath))
             {
-                if (!File.Exists(_logPath))
-                {
-                    throw new System.InvalidOperationException();
-                }
+                throw new System.InvalidOperationException();
             }
 
-            try
+            using (var file = new StreamReader(_logPath))
             {
-                readTransactions = File.ReadAllText(_logPath, Encoding.Default);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error:{ex.Message}");
+                readTransactions = file.ReadToEnd();
             }
 
             return readTransactions?.Length > default(int) ? readTransactions : "There are no recorded transactions";
+
         }
 
         public void Write(string logInfo)
         {
             if (!string.IsNullOrEmpty(_logPath) && !string.IsNullOrEmpty(logInfo))
-            
             {  
                 string? formattedString = string.Concat(logInfo, "\n");
 
-                try
-                {
-                    if (File.Exists(_logPath))
-                    {
-                        File.AppendAllText(_logPath, formattedString);
-                    }
-                    else
-                    {
-                        File.WriteAllText(_logPath, formattedString);
-                    }
-                }
-                catch(Exception ex)
-                {
-                    Console.WriteLine($"Error:{ex.Message}");
-                }
+                bool isFile = File.Exists(_logPath);
 
-                formattedString = null;
+                using (StreamWriter write = new StreamWriter(_logPath, isFile))
+                {
+                    write.Write(formattedString);
+                }
             }
         }
     }

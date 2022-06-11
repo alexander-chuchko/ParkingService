@@ -17,7 +17,7 @@ namespace CoolParking.BL
         #region ---helpers---
         private void ShowCurrentBalance()
         {
-            Console.WriteLine($"\t\tParking balance: {_parkingService.GetBalance()}");
+            Console.WriteLine($"\tParking balance: {_parkingService.GetBalance()}");
         }
 
         private void ShowAmountMoneyEarned()
@@ -26,17 +26,17 @@ namespace CoolParking.BL
 
             if (transactionsLog != null)
             {
-                Console.WriteLine($"\t\tAmount for the current period: {transactionsLog.Sum(tr => tr.Sum)}");
+                Console.WriteLine($"\tAmount for the current period: {transactionsLog.Sum(tr => tr.Sum)}");
             }
             else
             {
-                Console.WriteLine($"\t\tAmount for the current period: 0");
+                Console.WriteLine($"\tAmount for the current period: 0");
             }
         }
 
         private void ShowNumberFreeAndOccupiedSpaces()
         {
-            Console.WriteLine($"\t\tNumber of free - " +
+            Console.WriteLine($"\tNumber of free - " +
                 $"{_parkingService.GetFreePlaces()} / employed -" +
                 $" {_parkingService.GetCapacity() - _parkingService.GetFreePlaces()}");
         }
@@ -46,16 +46,16 @@ namespace CoolParking.BL
             if (_parkingService.GetFreePlaces() < Settings.parkingCapacity)
             {
                 int count = default(int);
-                Console.WriteLine($"\t\tVehicle list:\n");
+                Console.WriteLine($"\tVehicle list:\n");
 
                 foreach (var item in _parkingService.GetVehicles())
                 {
-                    Console.WriteLine($"\t\t{++count} - Id:{item.Id} VehicleType:{item.VehicleType} Balance:{item.Balance}");
+                    Console.WriteLine($"\t{++count} - Id:{item.Id} VehicleType:{item.VehicleType} Balance:{item.Balance}");
                 }
             }
             else
             {
-                Console.WriteLine("\t\tThere are no cars in the parking lot");
+                Console.WriteLine("\tThere are no cars in the parking lot");
             }
         }
 
@@ -67,16 +67,16 @@ namespace CoolParking.BL
 
             foreach (var item in transactions)
             {
-                Console.WriteLine($"{item}");
+                Console.WriteLine($"\t{item}");
             }
         }
 
         private void TopUpBalanceCar()
         {
-            Console.WriteLine("\t\tSpecify the index of the vehicle");
+            Console.WriteLine("\tSpecify the index of the vehicle");
             ShowListTrFundsLocated();
             string? id = Console.ReadLine();
-            Console.WriteLine("\t\tEnter replenishment amount");
+            Console.WriteLine("\tEnter replenishment amount");
             string? topUpAmount = Console.ReadLine();
             var vehicleses = _parkingService.GetVehicles();
 
@@ -88,7 +88,7 @@ namespace CoolParking.BL
 
         private void PickUpVehicle()
         {
-            Console.WriteLine("\t\tSpecify the index of the vehicle");
+            Console.WriteLine("\tSpecify the index of the vehicle");
             ShowListTrFundsLocated();
             string? id = Console.ReadLine();
 
@@ -105,7 +105,7 @@ namespace CoolParking.BL
         {
             var vehicle = new Vehicle(Vehicle.GenerateRandomRegistrationPlateNumber(), VehicleType.Truck, 100);
             _parkingService.AddVehicle(vehicle);
-            Console.WriteLine($"\t\tAdded to the parking car - Id:{vehicle.Id} VehicleType:{vehicle.VehicleType} Balance:{vehicle.Balance}");
+            Console.WriteLine($"\tAdded to the parking car - Id:{vehicle.Id} VehicleType:{vehicle.VehicleType} Balance:{vehicle.Balance}");
         }
 
         private void ClearConsole()
@@ -123,10 +123,10 @@ namespace CoolParking.BL
             Console.Clear();
             ChangedColor(ConsoleColor.Red);
 
-            Console.WriteLine("\n\t\t\t\t\tCOOL PARKING");
+            Console.WriteLine("\n\t\t\t\tCOOL PARKING");
             ChangedColor(ConsoleColor.Yellow);
 
-            Console.WriteLine("\n\t\tMENU");
+            Console.WriteLine("\n\tMENU");
 
             Console.ForegroundColor = ConsoleColor.White;
 
@@ -141,7 +141,7 @@ namespace CoolParking.BL
                 "8 - Display transaction history\n\t");
 
             Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.WriteLine("\n\t\tSelect the desired item:\n");
+            Console.WriteLine("\n\tSelect the desired item:\n");
             Console.ForegroundColor = ConsoleColor.White;
         }
 
@@ -207,7 +207,7 @@ namespace CoolParking.BL
                             break;
 
                         default:
-                            Console.WriteLine("Invalid value specified!");
+                            Console.WriteLine("\tInvalid value specified!");
                             break;
                     }
                 }
